@@ -45,7 +45,6 @@ if ($contactId > 0) {
             <img src="assets/dolphin.svg" alt="Dolphin CRM" class="brand-logo">
             <div>
                 <span class="brand-title">Dolphin CRM</span>
-                <span class="brand-caption">Admin Panel</span>
             </div>
         </div>
     </header>
