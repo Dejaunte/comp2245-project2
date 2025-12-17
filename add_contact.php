@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $company   = trim($_POST['company'] ?? '');
     $type      = trim($_POST['type'] ?? 'Sales Lead');
 
-    // Basic validation
+    
     if ($firstname === '' || $lastname === '' || $email === '' || $company === '') {
         $error = 'Firstname, Lastname, Email, and Company are required.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Invalid contact type.';
     } else {
         try {
-            // Optional: prevent duplicate emails
+            
             $check = $conn->prepare('SELECT id FROM Contacts WHERE email = :email LIMIT 1');
             $check->execute([':email' => $email]);
             if ($check->fetch()) {
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':created_by' => (int)$_SESSION['user_id']
                 ]);
 
-                // Redirect to dashboard (or the new contact page)
+                
                 header('Location: dashboard.php');
                 exit;
             }
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dolphin CRM - Add Contact</title>
-    <link rel="stylesheet" href="add_user.css">
+    <link rel="stylesheet" href="add_contact.css">
 </head>
 <body>
 <header class="top-bar">
