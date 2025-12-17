@@ -26,7 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $company   = trim($_POST['company'] ?? '');
     $type      = trim($_POST['type'] ?? 'Sales Lead');
 
-    
+
+    // Validate inputs
     if ($firstname === '' || $lastname === '' || $email === '' || $company === '') {
         $error = 'Firstname, Lastname, Email, and Company are required.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -35,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Invalid contact type.';
     } else {
         try {
-            
+            // Check for duplicate email
             $check = $conn->prepare('SELECT id FROM Contacts WHERE email = :email LIMIT 1');
             $check->execute([':email' => $email]);
             if ($check->fetch()) {
@@ -45,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'INSERT INTO Contacts (title, firstname, lastname, email, telephone, company, type, assigned_to, created_by, created_at, updated_at)
                      VALUES (:title, :firstname, :lastname, :email, :telephone, :company, :type, NULL, :created_by, NOW(), NOW())'
                 );
-
+                // Execute insertion
                 $stmt->execute([
                     ':title'      => $title,
                     ':firstname'  => $firstname,
@@ -57,10 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':created_by' => (int)$_SESSION['user_id']
                 ]);
 
-                
+                // Redirect to dashboard after successful creation
                 header('Location: dashboard.php');
                 exit;
-            }
+            } // end if duplicate check
         } catch (PDOException $e) {
             $error = 'Unable to create contact right now.';
         }
