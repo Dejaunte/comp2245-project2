@@ -29,12 +29,10 @@ body {
 .top-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .brand-logo {
-  width: 28px;
-  height: 28px;
   object-fit: contain;
 }
 

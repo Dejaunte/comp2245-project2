@@ -32,7 +32,7 @@ body {
 }
 
 .brand-logo {
-    margin-right: 10px;
+    object-fit: contain;
 }
 
 .brand-title {
