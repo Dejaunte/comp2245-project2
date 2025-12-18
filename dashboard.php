@@ -58,6 +58,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dolphin CRM - Dashboard</title>
     <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="contact.css">
 </head>
 <body>
     <header class="top-bar">
@@ -75,11 +76,15 @@ try {
         </aside>
 
         <main class="page-shell">
+           
+            <div id="dashboard-content">
             <div class="dashboard-hero">
                 <h1>Dashboard</h1>
-                <a href="add_contact.php" class="action-btn">+ Add New Contact</a>
+                <a href="add_contact.php" id="add-contact-btn" class="action-btn"> + Add New Contact </a>
             </div>
+                 
 
+            
             <div class="panel panel-compact">
                 <section class="panel-body">
                     <div class="filters-row">
@@ -163,7 +168,122 @@ try {
                     </div>
                 </section>
             </div>
-        </main>
+               </div> 
+        
+                <div id="ajax-content"></div>
+            </main>
     </div>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const ajaxContainer = document.getElementById('ajax-content');
+    const dashboardContent = document.getElementById('dashboard-content');
+    const sidebar = document.querySelector('.sidebar');
+    const addBtn = document.getElementById('add-contact-btn');
+
+    function loadPageViaAjax(url) {
+    currentAjaxUrl = url; 
+
+    fetch(url)
+        .then(res => res.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            doc.querySelector('.top-bar')?.remove();
+            doc.querySelector('.sidebar')?.remove();
+
+            const pageShell = doc.querySelector('.page-shell');
+
+            dashboardContent.style.display = 'none';
+            ajaxContainer.innerHTML = '';
+
+            if (pageShell) {
+                ajaxContainer.appendChild(pageShell);
+                attachAjaxFormHandler();
+            }
+        })
+        .catch(() => {
+            ajaxContainer.innerHTML =
+                '<div class="alert alert-error">Failed to load page</div>';
+        });
+}
+
+function attachAjaxFormHandler() {
+    const form = document.querySelector('#ajax-content form');
+    if (!form) return;
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+    
+        const action =
+            form.getAttribute('action') &&
+            form.getAttribute('action') !== '#'
+                ? form.getAttribute('action')
+                : currentAjaxUrl;
+
+        fetch(action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.text())
+        .then(html => {
+       
+            if (html.includes('<form')) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                doc.querySelector('.top-bar')?.remove();
+                doc.querySelector('.sidebar')?.remove();
+
+                const pageShell = doc.querySelector('.page-shell');
+
+                ajaxContainer.innerHTML = '';
+                ajaxContainer.appendChild(pageShell);
+
+                attachAjaxFormHandler();
+           } else {
+            if (currentAjaxUrl === 'add_user.php') {
+                loadPageViaAjax('view_users.php');
+            } else if (currentAjaxUrl === 'add_contact.php') {
+            ajaxContainer.innerHTML = '';
+            dashboardContent.style.display = 'block';
+            }
+        }
+        })
+        .catch(() => {
+            alert('Failed to submit form');
+        });
+    });
+}
+
+    
+    addBtn?.addEventListener('click', e => {
+        e.preventDefault();
+        loadPageViaAjax('add_contact.php');
+    });
+
+ 
+    document.addEventListener('click', e => {
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        const href = link.getAttribute('href');
+
+        if (
+            href === 'add_contact.php' ||
+            href === 'view_users.php' ||
+            href === 'add_user.php'
+        ) {
+            e.preventDefault();
+            loadPageViaAjax(href);
+        }
+    });
+});
+</script>
+
+
 </body>
 </html>

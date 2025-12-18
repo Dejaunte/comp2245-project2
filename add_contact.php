@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
 
                 // Redirect to dashboard after successful creation
-                header('Location: dashboard.php');
+               echo 'OK';
                 exit;
             } // end if duplicate check
         } catch (PDOException $e) {
@@ -159,13 +159,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div class="form-actions">
-                            <button type="button" class="submit-btn">Save</button>
+                            <button type="submit" class="submit-btn">Save</button>
                         </div>
                     </form>
                 </section>
             </div>
 
-            <section class="panel-body">
+        <!---    <section class="panel-body">
                 <?php if ($error): ?>
                     <div class="alert alert-error"><?php echo htmlspecialchars($error, ENT_QUOTES); ?></div>
                 <?php endif; ?>
@@ -210,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <button type="submit" class="action-btn">Save</button>
-                </form>
+                </form> -->
             </section>
         </div>
     </main>
