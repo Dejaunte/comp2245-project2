@@ -63,10 +63,9 @@ try {
 <body>
     <header class="top-bar">
         <div class="top-brand">
-            <img src="assets/dolphin.svg" alt="Dolphin CRM" class="brand-logo">
-            <div>
-                <span class="brand-title">Dolphin CRM</span>
-            </div>
+            <span class="brand-logo">🐬</span>
+            
+            <span class="brand-title">Dolphin CRM</span>
         </div>
     </header>
 
