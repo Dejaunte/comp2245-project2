@@ -4,4 +4,4 @@ This is Project 2 for Dejaunte Adams 500001483, Sedale Pelle 320076550, Daniella
 
 DB Info 
 Username:admin@project2.com
-PW:password123
+PW:password
